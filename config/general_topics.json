@@ -1,0 +1,18 @@
+{
+  "topics": [
+    { "id": "introduction", "label": "Introduction" },
+    { "id": "objective", "label": "Meeting Objective" },
+    { "id": "review", "label": "Previous Items Review" },
+    { "id": "updates", "label": "Project Updates" },
+    { "id": "discussion", "label": "Discussion Points" },
+    { "id": "decisions", "label": "Key Decisions" },
+    { "id": "action-items", "label": "Action Items" },
+    { "id": "assignments", "label": "Assignments" },
+    { "id": "timeline", "label": "Timeline Review" },
+    { "id": "budget", "label": "Budget Discussion" },
+    { "id": "challenges", "label": "Challenges & Risks" },
+    { "id": "resources", "label": "Resource Allocation" },
+    { "id": "next-meeting", "label": "Next Meeting" },
+    { "id": "conclusion", "label": "Conclusion" }
+  ]
+}
