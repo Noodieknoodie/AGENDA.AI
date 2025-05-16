@@ -1,6 +1,6 @@
 // backend/src/services/agenda-service.ts
 import { OpenAI } from 'openai';
-import * as docx from 'docx';
+import { Packer } from 'docx';
 import path from 'path';
 import fs from 'fs-extra';
 import { processClientMeetingData, processGeneralMeetingData } from '../utils/docx-utils';
@@ -39,8 +39,13 @@ export async function generateAgenda(formData: any, pdfFilePath: string | null):
 
       await openai.beta.threads.messages.create(thread.id, {
         role: "user",
-        content: "Please analyze the attached document and generate the agenda according to the instructions.",
-        file_ids: [file.id],
+        content: [
+          {
+            type: "text",
+            text: "Please analyze the attached document and generate the agenda according to the instructions."
+          }
+        ],
+        attachments: [{ file_id: file.id }],
       });
 
       let run = await openai.beta.threads.runs.create(thread.id, {
@@ -58,8 +63,13 @@ export async function generateAgenda(formData: any, pdfFilePath: string | null):
         const messages = await openai.beta.threads.messages.list(thread.id);
         const assistantMessages = messages.data.filter(msg => msg.role === "assistant");
 
-        if (assistantMessages.length > 0 && assistantMessages[0].content?.[0]?.text?.value) {
-          response = JSON.parse(assistantMessages[0].content[0].text.value);
+        if (assistantMessages.length > 0 && assistantMessages[0].content && assistantMessages[0].content.length > 0) {
+          const contentItem = assistantMessages[0].content[0];
+          if (contentItem.type === 'text' && contentItem.text?.value) {
+            response = JSON.parse(contentItem.text.value);
+          } else {
+            throw new Error("Invalid content format in assistant response");
+          }
         } else {
           throw new Error("No assistant response found");
         }
@@ -90,6 +100,8 @@ export async function generateAgenda(formData: any, pdfFilePath: string | null):
 
     // Check if template exists, if not, create a simple one
     if (!fs.existsSync(templatePath)) {
+      // Import the function directly to avoid circular dependency
+      const { createDefaultTemplate } = await import('../utils/docx-utils.js');
       await createDefaultTemplate(templatePath);
     }
 
@@ -99,7 +111,7 @@ export async function generateAgenda(formData: any, pdfFilePath: string | null):
       : await processGeneralMeetingData(response, templatePath);
 
     // Convert the document to a buffer
-    return await docx.Packer.toBuffer(docxDoc);
+    return await Packer.toBuffer(docxDoc);
   } catch (error) {
     console.error('Error in generateAgenda:', error);
     throw error;
@@ -107,16 +119,18 @@ export async function generateAgenda(formData: any, pdfFilePath: string | null):
 }
 
 async function createDefaultTemplate(templatePath: string): Promise<void> {
+  // Import Document and related classes directly here
+  const { Document, Paragraph, HeadingLevel, Packer } = await import('docx');
+  
   // Create a simple default template if none exists
-  const doc = new docx.Document({
+  const doc = new Document({
     sections: [{
-      properties: {},
       children: [
-        new docx.Paragraph({
+        new Paragraph({
           text: "Meeting Agenda",
-          heading: docx.HeadingLevel.HEADING_1,
+          heading: HeadingLevel.HEADING_1,
         }),
-        new docx.Paragraph({
+        new Paragraph({
           text: "This is a placeholder template. Please place your actual template file at the specified location.",
         }),
       ],
@@ -127,6 +141,6 @@ async function createDefaultTemplate(templatePath: string): Promise<void> {
   await fs.ensureDir(path.dirname(templatePath));
 
   // Save the template
-  const buffer = await docx.Packer.toBuffer(doc);
+  const buffer = await Packer.toBuffer(doc);
   await fs.writeFile(templatePath, buffer);
 }

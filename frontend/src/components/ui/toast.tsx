@@ -1,22 +1,29 @@
 // frontend/src/components/ui/toast.tsx
 import * as React from "react"
+import { createRoot } from "react-dom/client"
 import { X } from "lucide-react"
 import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
-const ToastProvider = React.forwardRef
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
-  <div
-    ref={ref}
-    className={cn(
-      "fixed top-0 z-[100] flex max-h-screen w-full flex-col-reverse p-4 sm:bottom-0 sm:right-0 sm:top-auto sm:flex-col md:max-w-[420px]",
-      className
-    )}
-    {...props}
-  />
-))
+const ToastProvider = React.forwardRef(
+  function ToastProvider(
+    props: React.HTMLAttributes<HTMLDivElement>,
+    ref: React.ForwardedRef<HTMLDivElement>
+  ) {
+    const { className, ...restProps } = props
+    
+    return (
+      <div
+        ref={ref}
+        className={cn(
+          "fixed top-0 z-[100] flex max-h-screen w-full flex-col-reverse p-4 sm:bottom-0 sm:right-0 sm:top-auto sm:flex-col md:max-w-[420px]",
+          className
+        )}
+        {...restProps}
+      />
+    )
+  }
+)
 ToastProvider.displayName = "ToastProvider"
 
 const toastVariants = cva(
@@ -35,60 +42,82 @@ const toastVariants = cva(
   }
 )
 
-const Toast = React.forwardRef
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement> & VariantProps<typeof toastVariants>
->(({ className, variant, ...props }, ref) => {
-  return (
-    <div
-      ref={ref}
-      className={cn(toastVariants({ variant }), className)}
-      {...props}
-    />
-  )
-})
+const Toast = React.forwardRef(
+  function Toast(
+    props: React.HTMLAttributes<HTMLDivElement> & VariantProps<typeof toastVariants>,
+    ref: React.ForwardedRef<HTMLDivElement>
+  ) {
+    const { className, variant, ...restProps } = props
+    
+    return (
+      <div
+        ref={ref}
+        className={cn(toastVariants({ variant }), className)}
+        {...restProps}
+      />
+    )
+  }
+)
 Toast.displayName = "Toast"
 
-const ToastClose = React.forwardRef
-  HTMLButtonElement,
-  React.ButtonHTMLAttributes<HTMLButtonElement>
->(({ className, ...props }, ref) => (
-  <button
-    ref={ref}
-    className={cn(
-      "absolute top-2 right-2 rounded-md p-1 text-foreground/50 opacity-0 transition-opacity hover:text-foreground focus:opacity-100 focus:outline-none focus:ring-2 group-hover:opacity-100 group-[.destructive]:text-red-300 group-[.destructive]:hover:text-red-50 group-[.destructive]:focus:ring-red-400 group-[.destructive]:focus:ring-offset-red-600",
-      className
-    )}
-    toast-close=""
-    {...props}
-  >
-    <X className="h-4 w-4" />
-  </button>
-))
+const ToastClose = React.forwardRef(
+  function ToastClose(
+    props: React.ButtonHTMLAttributes<HTMLButtonElement>,
+    ref: React.ForwardedRef<HTMLButtonElement>
+  ) {
+    const { className, ...restProps } = props
+    
+    return (
+      <button
+        ref={ref}
+        className={cn(
+          "absolute top-2 right-2 rounded-md p-1 text-foreground/50 opacity-0 transition-opacity hover:text-foreground focus:opacity-100 focus:outline-none focus:ring-2 group-hover:opacity-100 group-[.destructive]:text-red-300 group-[.destructive]:hover:text-red-50 group-[.destructive]:focus:ring-red-400 group-[.destructive]:focus:ring-offset-red-600",
+          className
+        )}
+        toast-close=""
+        {...restProps}
+      >
+        <X className="h-4 w-4" />
+      </button>
+    )
+  }
+)
 ToastClose.displayName = "ToastClose"
 
-const ToastTitle = React.forwardRef
-  HTMLHeadingElement,
-  React.HTMLAttributes<HTMLHeadingElement>
->(({ className, ...props }, ref) => (
-  <div
-    ref={ref}
-    className={cn("text-sm font-semibold", className)}
-    {...props}
-  />
-))
+const ToastTitle = React.forwardRef(
+  function ToastTitle(
+    props: React.HTMLAttributes<HTMLHeadingElement>,
+    ref: React.ForwardedRef<HTMLHeadingElement>
+  ) {
+    const { className, ...restProps } = props
+    
+    return (
+      <div
+        ref={ref}
+        className={cn("text-sm font-semibold", className)}
+        {...restProps}
+      />
+    )
+  }
+)
 ToastTitle.displayName = "ToastTitle"
 
-const ToastDescription = React.forwardRef
-  HTMLParagraphElement,
-  React.HTMLAttributes<HTMLParagraphElement>
->(({ className, ...props }, ref) => (
-  <div
-    ref={ref}
-    className={cn("text-sm opacity-90", className)}
-    {...props}
-  />
-))
+const ToastDescription = React.forwardRef(
+  function ToastDescription(
+    props: React.HTMLAttributes<HTMLParagraphElement>,
+    ref: React.ForwardedRef<HTMLParagraphElement>
+  ) {
+    const { className, ...restProps } = props
+    
+    return (
+      <div
+        ref={ref}
+        className={cn("text-sm opacity-90", className)}
+        {...restProps}
+      />
+    )
+  }
+)
 ToastDescription.displayName = "ToastDescription"
 
 type ToastProps = {
@@ -121,10 +150,12 @@ function toast({ title, description, variant = "default" }: ToastProps) {
     newContainer.className = "fixed top-0 z-[100] flex max-h-screen w-full flex-col-reverse p-4 sm:bottom-0 sm:right-0 sm:top-auto sm:flex-col md:max-w-[420px]";
     document.body.appendChild(newContainer);
 
-    ReactDOM.render(toastContent, toastElement);
+    const root = createRoot(toastElement);
+    root.render(toastContent);
     newContainer.appendChild(toastElement);
   } else {
-    ReactDOM.render(toastContent, toastElement);
+    const root = createRoot(toastElement);
+    root.render(toastContent);
     toastContainer.appendChild(toastElement);
   }
 
