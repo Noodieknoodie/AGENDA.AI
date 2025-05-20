@@ -1,33 +1,10 @@
-# LEARNING:
-## What is Code Interpreter?
-
-Code Interpreter is a powerful capability within Azure AI that enables your assistant to write and execute Python code in a sandboxed environment. With Code Interpreter enabled, your agent can:
-
-- Process and manipulate both Word documents and PDFs directly  
-- Run Python code iteratively to solve problems – if code fails, the agent can revise and try again  
-- Analyze data and generate formatted outputs  
-- Create and modify documents based on templates  
-
-Azure OpenAI Service with Code Interpreter provides the foundation for automating document generation workflows through your Teams application.
-
-## Why Choose Code Interpreter Over Manual JSON Processing
-
-Using Code Interpreter offers several key advantages:
-
-- Simplified architecture: Handles the entire document generation process in one step  
-- Direct document manipulation: Works directly with .docx files and PDFs, no need for intermediate formats  
-- Reduced development effort: No need to manage JSON schemas or build separate templating code  
-- Dynamic problem-solving: Automatically revises failed code until it works  
-
----
-
 Project Name: agendaprojectaifoundry
 
 API Key
 4JT0CYODqn5vzefAF0oCFscumJw6XJxkajlQbmXl0dtIdWwpEaH4JQQJ99BEAC4f1cMXJ3w3AAAAACOGD9qr
 
 Azure AI Foundry project endpoint
-https://agendaprojectaifoundry-resource.services.ai.azure.com/api/projects/AgendaProjectAiFoundry
+https://agendaprojectaifoundry-resource.services.ai.azure.com/api/projects/agendaprojectaifoundry
 
 Azure OpenAI endpoint
 https://agendaprojectaifoundry-resource.openai.azure.com/
@@ -52,22 +29,37 @@ westus
 
 # AGENT INFORMATION:
 
-Name: AgentAgenda
-ID: asst_EYO8rkvGIMgWCZhSQPIHw2NS
-Created: May 19, 2025 2:44 PM
-Agent: gpt-4o
-Tools: code_interpreter
-Description: Generates Client Meet...
-
-FILE UPLOADED TO CODE INTERPRETER:
-Agenda_Blank_With_Styles.docx
-Uploaded
-45.91 KB
-Local
-1747691284
+ENDPOINT: https://eknud-mawv9hve-westus3.cognitiveservices.azure.com/
+KEY: 2HnZLntgpEGGcDxdu0ZdGHxWV8uA3XhFcbZM8cOGIhbfbbff8cAbJQQJ99BEACMsfrFXJ3w3AAAAACOGEumX
+Target URl: https://agendaprojectaifoundry-resource.cognitiveservices.azure.com/openai/deployments/gpt-4.1/chat/completions?api-version=2025-01-01-preview
+Authentication Type: Key
+Key: 2HnZLntgpEGGcDxdu0ZdGHxWV8uA3XhFcbZM8cOGIhbfbbff8cAbJQQJ99BEACMsfrFXJ3w3AAAAACOGEumX
 
 
+Deployment info
+Name
+gpt-4.1
+Provisioning state
+Succeeded
+Deployment type
+Global Standard
+Created on
+2025-05-20T18:49:56.7067363Z
+Created by
+EKnudsen@HohimerWealthManagement.com
+Modified on
+May 20, 2025 11:49 AM
+Modified by
+EKnudsen@HohimerWealthManagement.com
+Version upgrade policy
+Once a new default version is available
+Rate limit (Tokens per minute)
+50,000
+Rate limit (Requests per minute)
+50
+Monitoring & safety
+Content filter
+DefaultV2
 
 ---
 
-For the system message: These instructions will be similar to the original system message that we have written, however, it will not instruct the agent to deliver JSON directly to user. it will still include all of the instructions as to how to think about the users inputs including the pdf, but now it will instruct the agent to use code interpreter to populate a docx file using the template in its knowledge base. The system prompt will give light instructions as to how to populate it with python, including the named styles within the template. The system prompt will include examples of what the expected output will look like, etc. the agent will have no problem creating the word document and delivering it back in its output. 
