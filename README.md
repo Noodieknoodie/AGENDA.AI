@@ -1,5 +1,3 @@
-Here's what I need, laid out in the order that actually matters.
-
 We're a financial planning firm where advisors waste hours manually extracting data from client performance PDFs to create meeting agendas. This project turns that into a few button clicks. The end product will live as a custom Microsoft Teams app that lets users upload a PDF, select a few options, and get back a perfectly formatted Word document.
 
 1. User flow in Teams app
